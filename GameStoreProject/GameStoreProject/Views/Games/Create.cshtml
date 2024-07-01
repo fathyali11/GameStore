@@ -1,0 +1,67 @@
+﻿@model GameViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">Create Game</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="All"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" placeholder="Enter Description"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="form-label mt-4"></label>
+                    <select class="form-select"asp-for="CategoryId" asp-items="Model.Categories">
+                        <option>Select Category</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    
+                </div>
+
+                <div>
+                    <label asp-for="SelectedDevices" class="form-label mt-4"></label>
+                    <select class="form-select" asp-for="SelectedDevices" asp-items="Model.Devices">
+                        <option>Select Device</option>
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Cover" class="form-label">Cover Image</label>
+                    <input asp-for="Cover" class="form-control" type="file" />
+                    <small>
+                        <div>Image must be @FileSettings.FileExtensions</div>
+                    </small>
+
+                    <span asp-validation-for="Cover" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <partial name="_ValidationScriptsPartial" />
+
+    </div>
+</div>

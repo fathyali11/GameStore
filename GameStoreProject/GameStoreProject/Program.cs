@@ -1,7 +1,19 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                                ?? throw new InvalidOperationException("No connection string was found");
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString), ServiceLifetime.Scoped);
+
+
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<ICategoryHelper, CategoryHelper>();
+builder.Services.AddScoped<IDeviceHelper, DeviceHelper>();
+builder.Services.AddScoped<IGameHelper, GameHelper>();
 
 var app = builder.Build();
 

@@ -11,6 +11,6 @@ namespace GameStoreProject.Models
 
         public Category Category { get; set; } = default!;
         public int CategoryId { get; set; }
-        public ICollection<GameDevice> Devices { get; set; }
+        public IEnumerable<GameDevice> Devices { get; set; }
     }
 }

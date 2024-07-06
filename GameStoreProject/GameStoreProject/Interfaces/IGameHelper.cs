@@ -5,6 +5,7 @@ namespace GameStoreProject.Interfaces
 {
     public interface IGameHelper
     {
+        //Done
         Task Add(GameViewModel model);
         void Remove(int id);
         void Update(GameViewModel model, int id);

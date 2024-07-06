@@ -6,16 +6,17 @@ namespace GameStoreProject.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IGameHelper gameHelper;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IGameHelper _gameHelper)
         {
-            _logger = logger;
+            this.gameHelper = _gameHelper;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var games = gameHelper.GetAll();
+            return View(games);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

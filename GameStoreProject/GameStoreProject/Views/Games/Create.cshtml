@@ -9,7 +9,7 @@
     <hr />
     <div class="row">
         <div class="col-md-6">
-            <form asp-action="Create" enctype="multipart/form-data">
+            <form asp-action="Create" enctype="multipart/form-data" onsubmit="return validateFileSize()">
                 <div asp-validation-summary="All"></div>
 
                 <div class="mb-3">
@@ -25,29 +25,26 @@
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="CategoryId" class="form-label mt-4"></label>
-                    <select class="form-select"asp-for="CategoryId" asp-items="Model.Categories">
+                    <label asp-for="CategoryId" class="form-label mt-4">Category</label>
+                    <select class="form-select" asp-for="CategoryId" asp-items="Model.Categories">
                         <option>Select Category</option>
                     </select>
                     <span asp-validation-for="CategoryId" class="text-danger"></span>
-                    
                 </div>
 
-                <div>
-                    <label asp-for="SelectedDevices" class="form-label mt-4"></label>
+                <div class="mb-3">
+                    <label asp-for="SelectedDevices" class="form-label mt-4">Device</label>
                     <select class="form-select" asp-for="SelectedDevices" asp-items="Model.Devices">
                         <option>Select Device</option>
                     </select>
-
                 </div>
 
                 <div class="mb-3">
                     <label asp-for="Cover" class="form-label">Cover Image</label>
-                    <input asp-for="Cover" class="form-control" type="file" />
+                    <input asp-for="Cover" id="coverInput" class="form-control" type="file" onchange="previewImage(event)" />
                     <small>
                         <div>Image must be @FileSettings.FileExtensions</div>
                     </small>
-
                     <span asp-validation-for="Cover" class="text-danger"></span>
                 </div>
 
@@ -56,12 +53,19 @@
                 </div>
             </form>
         </div>
+        <div class="col-md-6 d-flex align-items-center justify-content-center">
+            <div id="imagePreview" class="text-center">
+                <img id="previewImage" src="#" alt="Preview" style="max-width: 100%; max-height: 500px; display: none;" />
+            </div>
+        </div>
     </div>
-
 
     <div class="mt-4">
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
         <partial name="_ValidationScriptsPartial" />
-
     </div>
 </div>
+
+<script src="~/js/GamePhoto.js" asp-append-version="true"></script>
+<script src="~/js/validateFileSize.js" asp-append-version="true"></script>
+

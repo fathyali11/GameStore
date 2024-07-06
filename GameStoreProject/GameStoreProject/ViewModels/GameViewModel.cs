@@ -21,6 +21,7 @@ namespace GameStoreProject.ViewModels
         [Display(Name = "Devices")]
         public List<int> SelectedDevices { get; set; } = default!;
         [FileExtension(".jpg,.jpeg,.webp")]
+        [FileMaxSize(maxSizeInMegabytes:FileSettings.MaxSizeInMB)]
         public IFormFile Cover { get; set; } = default!;
     }
 }

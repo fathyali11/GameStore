@@ -15,7 +15,7 @@
             if (file is not null)
             {
                 var FileExtension=Path.GetExtension(file.FileName);
-                var Extensions=_validExtensions.Split('.');
+                var Extensions=_validExtensions.Split(',');
                 var IsFound=Extensions.Contains(FileExtension,StringComparer.OrdinalIgnoreCase);
                 if (!IsFound)
                     return new ValidationResult(GetErrorMessage());

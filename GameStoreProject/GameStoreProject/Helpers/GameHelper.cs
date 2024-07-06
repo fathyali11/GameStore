@@ -3,6 +3,7 @@ using GameStoreProject.Interfaces;
 using GameStoreProject.Models;
 using GameStoreProject.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameStoreProject.Helpers
 {
@@ -22,33 +23,18 @@ namespace GameStoreProject.Helpers
         }
         public async Task Add(GameViewModel model)
         {
-            Game game = new Game
+            var coverName = await SaveCover(model.Cover);
+
+            Game game = new()
             {
                 Name = model.Name,
                 Description = model.Description,
                 CategoryId = model.CategoryId,
-                Devices = model.SelectedDevices?.Select(x => new GameDevice { DeviceId = x }).ToList() ?? new List<GameDevice>()
+                Cover = coverName,
+                Devices = model.SelectedDevices.Select(d => new GameDevice { DeviceId = d }).ToList()
             };
 
-            if (model.Cover is not null)
-            {
-                string uploadFolder = Path.Combine(webHostEnvironment.WebRootPath, "Images/Games");
-                string uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(model.Cover.FileName)}";
-                string filePath = Path.Combine(uploadFolder, uniqueFileName);
-
-                if (!Directory.Exists(uploadFolder))
-                {
-                    Directory.CreateDirectory(uploadFolder);
-                }
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await model.Cover.CopyToAsync(fileStream);
-                }
-                game.Cover = uniqueFileName;
-            }
-
-            context.Games.Add(game);
+            context.Add(game);
             context.SaveChanges();
         }
 
@@ -56,7 +42,7 @@ namespace GameStoreProject.Helpers
 
         public List<Game> GetAll()
         {
-            return context.Games.ToList();
+            return context.Games.Include(a=>a.Category).Include(a=>a.Devices).ThenInclude(a=>a.Device).AsNoTracking().ToList();
         }
 
         public Game GetById(int id)
@@ -92,6 +78,19 @@ namespace GameStoreProject.Helpers
             game.Categories = categoryHelper.CategoriesListToselectListItems();
             game.Devices = deviceHelper.DevicesListToselectListItems();
             return game;
+        }
+         
+
+        private async Task<string> SaveCover(IFormFile cover)
+        {
+            var coverName = $"{Guid.NewGuid()}{Path.GetExtension(cover.FileName)}";
+
+            var path = Path.Combine(FileSettings.ImagePath, coverName);
+
+            using var stream = File.Create(path);
+            await cover.CopyToAsync(stream);
+
+            return coverName;
         }
     }
 }

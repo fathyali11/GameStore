@@ -79,18 +79,26 @@ namespace GameStoreProject.Helpers
             game.Devices = deviceHelper.DevicesListToselectListItems();
             return game;
         }
-         
+
 
         private async Task<string> SaveCover(IFormFile cover)
         {
             var coverName = $"{Guid.NewGuid()}{Path.GetExtension(cover.FileName)}";
+            var imagesPath = Path.Combine(webHostEnvironment.WebRootPath, "images", "games");
+            var path = Path.Combine(imagesPath, coverName);
 
-            var path = Path.Combine(FileSettings.ImagePath, coverName);
+            // Ensure the directory exists
+            if (!Directory.Exists(imagesPath))
+            {
+                Directory.CreateDirectory(imagesPath);
+            }
 
-            using var stream = File.Create(path);
+            using var stream = new FileStream(path, FileMode.Create);
             await cover.CopyToAsync(stream);
 
             return coverName;
         }
+
+
     }
 }

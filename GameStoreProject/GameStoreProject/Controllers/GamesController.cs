@@ -15,16 +15,16 @@ namespace GameStoreProject.Controllers
         public IActionResult Create()
         {
             
-            return View(GameHelper.GetFullGameViewModel(new GameViewModel()));
+            return View(GameHelper.GetFullGameViewModel(new CreateGameViewModel()));
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(GameViewModel gameViewModel)
+        public async Task<IActionResult> Create(CreateGameViewModel gameViewModel)
         {
 
             if(!ModelState.IsValid)
             {
-                GameViewModel game=GameHelper.GetFullGameViewModel(gameViewModel);
+                CreateGameViewModel game=GameHelper.GetFullGameViewModel(gameViewModel);
                 return View(game);
             }
             await GameHelper.Add(gameViewModel);
@@ -32,7 +32,39 @@ namespace GameStoreProject.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var games = GameHelper.GetAll();
+            return View(games);
+        }
+        public IActionResult Delete(int id)
+        {
+            GameHelper.Remove(id);
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var game = GameHelper.GetEditGameViewModel(id);
+            return View(game);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditGameViewModel gameViewModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(GameHelper.GetFullGameViewModelEdit(gameViewModel));
+            }
+            var game=await GameHelper.Update(gameViewModel);
+            if(game is null)
+                return BadRequest();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Details(int id)
+        {
+            var game=GameHelper.GetById(id);
+            if (game == null)
+                return NotFound();
+            return View(game);
         }
     }
 }

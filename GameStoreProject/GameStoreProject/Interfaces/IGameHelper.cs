@@ -6,13 +6,15 @@ namespace GameStoreProject.Interfaces
     public interface IGameHelper
     {
         //Done
-        Task Add(GameViewModel model);
+        Task Add(CreateGameViewModel model);
         void Remove(int id);
-        void Update(GameViewModel model, int id);
+        Task<Game?> Update(EditGameViewModel model);
         List<Game> GetAll();    
-        Game GetById(int id);
+        Game? GetById(int id);
         Game GetByName(string name);
-        GameViewModel GetFullGameViewModel(GameViewModel model);
+        CreateGameViewModel GetFullGameViewModel(CreateGameViewModel model);
+        EditGameViewModel GetFullGameViewModelEdit(EditGameViewModel model);
+        EditGameViewModel GetEditGameViewModel(int id);
 
     }
 }

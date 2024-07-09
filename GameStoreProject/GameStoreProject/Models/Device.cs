@@ -6,6 +6,6 @@ namespace GameStoreProject.Models
     {
         [MaxLength(50)]
         public string Icon { get; set; } = string.Empty;
-        public ICollection<GameDevice> Games { get; set; }=new List<GameDevice>();
+        public ICollection<GameDevice> Games { get; set; } = default!;
     }
 }

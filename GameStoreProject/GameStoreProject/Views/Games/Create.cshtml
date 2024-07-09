@@ -1,4 +1,4 @@
-﻿@model GameViewModel
+﻿@model CreateGameViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -26,37 +26,34 @@
 
                 <div class="form-group">
                     <label asp-for="CategoryId" class="form-label mt-4">Category</label>
-                    <select class="form-select" asp-for="CategoryId" asp-items="Model.Categories">
-                        <option>Select Category</option>
+                    <select class="form-select select2" asp-for="CategoryId" asp-items="Model.Categories">
+                        <option></option>
                     </select>
                     <span asp-validation-for="CategoryId" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
                     <label asp-for="SelectedDevices" class="form-label mt-4">Device</label>
-                    <select class="form-select" asp-for="SelectedDevices" asp-items="Model.Devices">
-                        <option>Select Device</option>
+                    <select class="form-select select2" asp-for="SelectedDevices" asp-items="Model.Devices" multiple="multiple">
+                        <option></option>
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Cover" class="form-label">Cover Image</label>
-                    <input asp-for="Cover" id="coverInput" class="form-control" type="file" onchange="previewImage(event)" />
-                    <small>
-                        <div>Image must be @FileSettings.FileExtensions</div>
-                    </small>
-                    <span asp-validation-for="Cover" class="text-danger"></span>
+                <div class="form-group">
+                    <label asp-for="Cover" class="form-label mt-4">Cover Image</label>
+                    <input type="file" class="form-control" asp-for="Cover"
+                           data-rule-extension="@FileSettings.FileExtensions.Replace(".", string.Empty)"
+                           data-msg-extension="Not allowed extension"
+                           data-rule-filesize="@FileSettings.MaxSizeInByte"
+                           data-msg-filesize="Maximum allowed size is @FileSettings.MaxSizeInMB MB">
+                    <small class="form-text text-muted">Only @FileSettings.FileExtensions files are allowed with max size @(FileSettings.MaxSizeInMB)MB.</small>
+                    <span asp-validation-for="Cover" class="text-danger d-block"></span>
                 </div>
-
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Create</button>
-                </div>
+                <button type="submit" class="btn btn-primary mt-4">Create</button>
             </form>
         </div>
-        <div class="col-md-6 d-flex align-items-center justify-content-center">
-            <div id="imagePreview" class="text-center">
-                <img id="previewImage" src="#" alt="Preview" style="max-width: 100%; max-height: 500px; display: none;" />
-            </div>
+        <div class="col-md-6 d-flex justify-content-center pt-4 overflow-hidden">
+            <img id="previewImage" class="cover-preview d-none" alt="Cover" style="max-width: 100%; max-height: 500px;" />
         </div>
     </div>
 
@@ -66,6 +63,42 @@
     </div>
 </div>
 
-<script src="~/js/GamePhoto.js" asp-append-version="true"></script>
-<script src="~/js/validateFileSize.js" asp-append-version="true"></script>
+@section Scripts {
+    <script src="~/js/GamePhoto.js" asp-append-version="true"></script>
+    <script src="~/js/validateFileSize.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                placeholder: "Select an option",
+                allowClear: true,
+                tags: true,
+                width: '100%',
+                theme: 'bootstrap-5'
+            });
 
+            // Ensure the placeholder is shown when there are no selections
+            $('.select2').on('select2:unselecting', function (e) {
+                var $this = $(this);
+                setTimeout(function () {
+                    if ($this.val().length === 0) {
+                        $this.select2({
+                            placeholder: "Select an option",
+                            allowClear: true,
+                            tags: true,
+                            width: '100%',
+                            theme: 'bootstrap-5'
+                        });
+                    }
+                }, 0);
+            });
+        });
+
+        $('#coverInput').on('change', function () {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#previewImage').attr('src', e.target.result).removeClass('d-none');
+            };
+            reader.readAsDataURL(this.files[0]);
+        });
+    </script>
+}

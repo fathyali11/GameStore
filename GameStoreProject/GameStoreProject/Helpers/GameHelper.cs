@@ -21,7 +21,7 @@ namespace GameStoreProject.Helpers
             this.categoryHelper = categoryHelper;
             this.webHostEnvironment = webHostEnvironment;
         }
-        public async Task Add(GameViewModel model)
+        public async Task Add(CreateGameViewModel model)
         {
             var coverName = await SaveCover(model.Cover);
 
@@ -38,16 +38,24 @@ namespace GameStoreProject.Helpers
             context.SaveChanges();
         }
 
-
-
         public List<Game> GetAll()
         {
-            return context.Games.Include(a=>a.Category).Include(a=>a.Devices).ThenInclude(a=>a.Device).AsNoTracking().ToList();
+            return context.Games
+                .Include(a=>a.Category)
+                .Include(a=>a.Devices)
+                .ThenInclude(a=>a.Device)
+                .AsNoTracking()
+                .ToList();
         }
 
-        public Game GetById(int id)
+        public Game? GetById(int id)
         {
-            return context.Games.Find(id);
+            return context
+                .Games
+                .Include(x=>x.Category)
+                .Include(x=>x.Devices)
+                .ThenInclude(x=>x.Device)
+                .FirstOrDefault(x=>x.Id==id);
         }
 
         public Game GetByName(string name)
@@ -58,20 +66,48 @@ namespace GameStoreProject.Helpers
         public void Remove(int id)
         {
             context.Games.Remove(GetById(id));
-        }
-
-        public void Update(GameViewModel model, int id)
-        {
-            Game OldGame=GetById(id);
-            OldGame.Name = model.Name;
-            OldGame.Description = model.Description;
-
             context.SaveChanges(true);
         }
 
-        GameViewModel IGameHelper.GetFullGameViewModel(GameViewModel model)
+
+        public async Task<Game?> Update(EditGameViewModel model)
         {
-            GameViewModel game = new GameViewModel();
+            Game ?OldGame=GetById(model.Id);
+            if (OldGame is null)
+                return null;
+
+            OldGame.Name = model.Name;
+            OldGame.Description = model.Description;
+            OldGame.CategoryId = model.CategoryId;
+            OldGame.Devices = model.SelectedDevices.Select(x => new GameDevice { DeviceId = x }).ToList();
+            var OldCover = OldGame.Cover;
+            var HasNewCover = model.Cover is not null;
+            if(HasNewCover)
+            {
+                OldGame.Cover= await SaveCover(model.Cover);
+            }
+
+            var NumberOfUpdates= context.SaveChanges(true);
+            if(NumberOfUpdates>0)
+            {
+                if (HasNewCover)
+                {
+                    var path = Path.Combine(FileSettings.ImagePath, OldCover);
+                    File.Delete(path);
+                }
+                return OldGame;
+            }
+            else
+            {
+                var cover = Path.Combine(FileSettings.ImagePath, OldGame.Cover);
+                File.Delete(cover);
+                return null;
+            }
+        }
+
+        CreateGameViewModel IGameHelper.GetFullGameViewModel(CreateGameViewModel model)
+        {
+            CreateGameViewModel game = new CreateGameViewModel();
             game.Name = model.Name==null?null:model.Name;
             game.Description = model.Description==null?null:model.Description;
             game.Cover = model.Cover==null?null:model.Cover;
@@ -81,24 +117,57 @@ namespace GameStoreProject.Helpers
         }
 
 
-        private async Task<string> SaveCover(IFormFile cover)
+        public EditGameViewModel GetEditGameViewModel(int id)
         {
-            var coverName = $"{Guid.NewGuid()}{Path.GetExtension(cover.FileName)}";
-            var imagesPath = Path.Combine(webHostEnvironment.WebRootPath, "images", "games");
-            var path = Path.Combine(imagesPath, coverName);
-
-            // Ensure the directory exists
-            if (!Directory.Exists(imagesPath))
+            var game=GetById(id);
+            var model = new EditGameViewModel
             {
-                Directory.CreateDirectory(imagesPath);
-            }
-
-            using var stream = new FileStream(path, FileMode.Create);
-            await cover.CopyToAsync(stream);
-
-            return coverName;
+                Id=game.Id,
+                Name = game.Name,
+                Description = game.Description,
+                CoverName = game.Cover,
+                CategoryId = game.CategoryId,
+                SelectedDevices = game.Devices.Select(x => x.DeviceId).ToList(),
+                Categories= categoryHelper.CategoriesListToselectListItems(),
+                Devices=deviceHelper.DevicesListToselectListItems()
+        };
+            return model;
         }
 
+        public EditGameViewModel GetFullGameViewModelEdit(EditGameViewModel model)
+        {
+            EditGameViewModel game = new EditGameViewModel();
+            game.Id = model.Id==null?0:model.Id;
+            game.Name = model.Name == null ? null : model.Name;
+            game.Description = model.Description == null ? null : model.Description;
+            game.Cover = model.Cover == null ? null : model.Cover;
+            game.Categories = categoryHelper.CategoriesListToselectListItems();
+            game.Devices = deviceHelper.DevicesListToselectListItems();
+            return game;
+        }
+        private async Task<string?> SaveCover(IFormFile cover)
+        {
+            if(cover is not null)
+            {
+                var coverName = $"{Guid.NewGuid()}{Path.GetExtension(cover.FileName)}";
+                var imagesPath = Path.Combine(webHostEnvironment.WebRootPath, "images", "games");
+                var path = Path.Combine(imagesPath, coverName);
 
+                if (!Directory.Exists(imagesPath))
+                {
+                    Directory.CreateDirectory(imagesPath);
+                }
+
+                using var stream = new FileStream(path, FileMode.Create);
+                await cover.CopyToAsync(stream);
+
+                return coverName;
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
     }
 }

@@ -35,10 +35,13 @@ namespace GameStoreProject.Controllers
             var games = GameHelper.GetAll();
             return View(games);
         }
+        [HttpDelete]
         public IActionResult Delete(int id)
         {
-            GameHelper.Remove(id);
-            return RedirectToAction("Index");
+            var IsDeleted=GameHelper.Remove(id);
+            if (IsDeleted)
+                return Ok();
+            return BadRequest();
         }
         [HttpGet]
         public IActionResult Edit(int id)

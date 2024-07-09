@@ -63,10 +63,24 @@ namespace GameStoreProject.Helpers
             return context.Games.FirstOrDefault(x => x.Name == name);
         }
 
-        public void Remove(int id)
+        public bool Remove(int id)
         {
-            context.Games.Remove(GetById(id));
-            context.SaveChanges(true);
+            bool isDeleted = false;
+
+            var game= context.Games.FirstOrDefault(x=> x.Id==id);
+            if (game is null)
+                return isDeleted;
+            context.Games.Remove(game);
+            var numberOfUpdates = context.SaveChanges();
+            if (numberOfUpdates > 0)
+            {
+                isDeleted = true;
+                var path = Path.Combine(webHostEnvironment.ContentRootPath,FileSettings.ImagePath, game.Cover);
+                File.Delete(path);
+                return isDeleted;
+            }
+            else
+                return isDeleted;
         }
 
 

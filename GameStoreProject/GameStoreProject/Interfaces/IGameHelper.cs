@@ -7,7 +7,7 @@ namespace GameStoreProject.Interfaces
     {
         //Done
         Task Add(CreateGameViewModel model);
-        void Remove(int id);
+        bool Remove(int id);
         Task<Game?> Update(EditGameViewModel model);
         List<Game> GetAll();    
         Game? GetById(int id);

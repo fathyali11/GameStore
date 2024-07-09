@@ -25,8 +25,32 @@
       "PackagePath": "staticwebassets\\Images\\Games\\1613b15f-b13d-4fbd-a209-ae7c4ca1ba8e.webp"
     },
     {
+      "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\Images\\Games\\1af32558-4774-4ff1-aeb0-936f74e38208.jpeg",
+      "PackagePath": "staticwebassets\\Images\\Games\\1af32558-4774-4ff1-aeb0-936f74e38208.jpeg"
+    },
+    {
       "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\Images\\Games\\394623d6-b86c-45a8-a75d-f514ae76a88d.webp",
       "PackagePath": "staticwebassets\\Images\\Games\\394623d6-b86c-45a8-a75d-f514ae76a88d.webp"
+    },
+    {
+      "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\Images\\Games\\41324d5f-22f5-402c-a508-cfbd6a64798a.jpeg",
+      "PackagePath": "staticwebassets\\Images\\Games\\41324d5f-22f5-402c-a508-cfbd6a64798a.jpeg"
+    },
+    {
+      "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\Images\\Games\\4e0ee060-64af-483d-9dd3-927a81629d9a.jpeg",
+      "PackagePath": "staticwebassets\\Images\\Games\\4e0ee060-64af-483d-9dd3-927a81629d9a.jpeg"
+    },
+    {
+      "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\Images\\Games\\9a5a2ed7-425b-4f3b-99fa-19239b91af61.jpeg",
+      "PackagePath": "staticwebassets\\Images\\Games\\9a5a2ed7-425b-4f3b-99fa-19239b91af61.jpeg"
+    },
+    {
+      "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\Images\\Games\\ace7317e-7452-4744-b697-f359b23b441d.webp",
+      "PackagePath": "staticwebassets\\Images\\Games\\ace7317e-7452-4744-b697-f359b23b441d.webp"
+    },
+    {
+      "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\Images\\Games\\b11f8093-3a44-4d12-94ba-8598115aef1a.jpeg",
+      "PackagePath": "staticwebassets\\Images\\Games\\b11f8093-3a44-4d12-94ba-8598115aef1a.jpeg"
     },
     {
       "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\Images\\Games\\c3168ccd-7434-4cb9-998a-409634c33b03.webp",
@@ -43,6 +67,10 @@
     {
       "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\js\\DeleteGame.js",
+      "PackagePath": "staticwebassets\\js\\DeleteGame.js"
     },
     {
       "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\js\\GamePhoto.js",
@@ -9063,6 +9091,14 @@
     {
       "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\lib\\select2\\js\\select2.min.js",
       "PackagePath": "staticwebassets\\lib\\select2\\js\\select2.min.js"
+    },
+    {
+      "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\lib\\sweetalert2\\sweetalert2.min.css",
+      "PackagePath": "staticwebassets\\lib\\sweetalert2\\sweetalert2.min.css"
+    },
+    {
+      "Id": "D:\\RealProjects\\GameStore\\GameStoreProject\\GameStoreProject\\wwwroot\\lib\\sweetalert2\\sweetalert2.min.js",
+      "PackagePath": "staticwebassets\\lib\\sweetalert2\\sweetalert2.min.js"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.GameStoreProject.Microsoft.AspNetCore.StaticWebAssets.props",

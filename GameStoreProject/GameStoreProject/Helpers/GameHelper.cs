@@ -75,7 +75,7 @@ namespace GameStoreProject.Helpers
             if (numberOfUpdates > 0)
             {
                 isDeleted = true;
-                var path = Path.Combine(webHostEnvironment.ContentRootPath,FileSettings.ImagePath, game.Cover);
+                var path = Path.Combine($"{webHostEnvironment.WebRootPath}/{FileSettings.ImagePath}",game.Cover);
                 File.Delete(path);
                 return isDeleted;
             }
@@ -164,7 +164,7 @@ namespace GameStoreProject.Helpers
             if(cover is not null)
             {
                 var coverName = $"{Guid.NewGuid()}{Path.GetExtension(cover.FileName)}";
-                var imagesPath = Path.Combine(webHostEnvironment.WebRootPath, "images", "games");
+                var imagesPath = Path.Combine(webHostEnvironment.WebRootPath,FileSettings.ImagePath);
                 var path = Path.Combine(imagesPath, coverName);
 
                 if (!Directory.Exists(imagesPath))

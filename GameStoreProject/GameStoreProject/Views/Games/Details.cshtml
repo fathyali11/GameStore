@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <img src="@($"{FileSettings.ImagePath}/{Model.Cover}")" alt="@Model.Name" class="w-100" />
+                <img src="@Url.Content($"~/{FileSettings.ImagePath}/{Model.Cover}")" alt="@Model.Name" class="w-100" />
             </div>
         </div>
     </div>

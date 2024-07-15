@@ -50,7 +50,7 @@
             <button type="submit" class="btn btn-light text-black mt-4">Save</button>
         </div>
         <div class="col-md-6 d-flex justify-content-center pt-4 overflow-hidden">
-            <img class="cover-preview" alt="Cover" src="@($"{FileSettings.ImagePath}/{Model.CoverName}")" />
+            <img class="cover-preview" alt="Cover" src="@Url.Content($"~/{FileSettings.ImagePath}/{Model.CoverName}")" />
         </div>
     </div>
 </form>
